@@ -21,25 +21,24 @@ int main() {
 	int PC = 0; 
 	
 	memory[101] = 2863311530;
-	memory[102] = INT_MAX;
-	memory[103] = INT_MAX;
-	memory[104] = INT_MAX;
-	memory[105] = INT_MAX;
-	memory[106] = INT_MAX;
-	memory[107] = INT_MAX;
-	memory[108] = INT_MAX;
-	memory[109] = INT_MAX;
+	memory[102] = 2863311530;
+	memory[103] = 2863311530;
+	memory[104] = 2863311530;
+	memory[105] = 2863311530;
+	memory[106] = 2863311530;
+	memory[107] = 2863311530;
+	memory[108] = 2863311530;
+	memory[109] = 2863311530;
 
 	//regData[32] = { int(pow(2, 31)) };
 	regData[1] = 100;
+	regData[3] = 100;
+	regData[5] = 100;
 	//vector<int> z = { 1,0,14 };
-	vector<int32_t> z1 = { 2,1, 1 }; 
-	vector<int32_t> z2 = { 3,2, 2 };
+	vector<int32_t> z1 = { 2, 1, 1 }; 
 	vector<int32_t> z3 = { 4, 3, 3 };
-	vector<int32_t> z4 = { 5, 4, 4 };
 	vector<int32_t> z5 = { 6, 5, 5 };
-	vector<int32_t> z6 = { 7, 6, 6 };
-	vector<int32_t> z7 = { 8, 7, 7};
+
 
 	/*instruction.push_back(make_pair("LUI", z));
 	instruction.push_back(make_pair("AUIPC", z1));
@@ -51,14 +50,14 @@ int main() {
 	instruction.push_back(make_pair("BGE", z));
 	instruction.push_back(make_pair("BLTU", z6));
 	instruction.push_back(make_pair("BGEU", z1));*/
-	instruction.push_back(make_pair("LHU", z1));
+	//instruction.push_back(make_pair("LB", z1));
 	/*instruction.push_back(make_pair("LH", z2));
 	instruction.push_back(make_pair("LW", z3));
 	instruction.push_back(make_pair("LBU", z4));
 	instruction.push_back(make_pair("LHU", z5));*/
-	/*instruction.push_back(make_pair("SB", z7));
-	instruction.push_back(make_pair("SH", z7));
-	instruction.push_back(make_pair("SW", z7));*/
+	instruction.push_back(make_pair("SB", z1));
+	instruction.push_back(make_pair("SH", z3));
+	instruction.push_back(make_pair("SW", z5));
 
 
 	for (int i = 0; i < instruction.size(); i++) { //check this loop ----------------------------
@@ -205,6 +204,9 @@ int main() {
 				offset = instruction[i].second[1];
 			int8_t temp = regData[instruction[i].second[0]]; //int8 to store just 8 bits 
 			memory[rs1 + offset] = temp;	 
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//SH
 		if (instruction[i].first == "SH") {
@@ -212,12 +214,18 @@ int main() {
 				offset = instruction[i].second[1];
 			int16_t temp = regData[instruction[i].second[0]]; //int8 to store just 16 bits 
 			memory[rs1 + offset] = temp;
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//SW
 		if (instruction[i].first == "SW") {
 			int rs1 = regData[instruction[i].second[2]],
 				offset = instruction[i].second[1];
 			memory[rs1 + offset] = regData[instruction[i].second[0]]; //storing the whole 32 bits 
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 	}
 
