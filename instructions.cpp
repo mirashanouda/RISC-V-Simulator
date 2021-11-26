@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <sstream>
 //#include <climits>
 using namespace std; 
 
@@ -13,14 +14,15 @@ test loops
 int main() {
 
 	//suppose: 
-	vector<pair<string, vector<int32_t>>> instruction;
+	vector<pair<string, vector<int>>> instruction;
 	int regData[32]; //32 map for every reg num and it's data
-	map<int32_t, int32_t> memory; //maps addresses to values (32 bits)
-	map<string, int32_t> label; //for label addressing in the inst
+	map<int, int> memory; //maps addresses to values (32 bits)
+	map<string, int> label; //for label addressing in the inst
+	map<int, int>::iterator it;
 
-	int PC = 0; 
+	int pc = 0; 
 	
-	memory[101] = 2863311530;
+	/*memory[101] = 2863311530;
 	memory[102] = 2863311530;
 	memory[103] = 2863311530;
 	memory[104] = 2863311530;
@@ -28,37 +30,67 @@ int main() {
 	memory[106] = 2863311530;
 	memory[107] = 2863311530;
 	memory[108] = 2863311530;
-	memory[109] = 2863311530;
+	memory[109] = 2863311530;*/
 
-	//regData[32] = { int(pow(2, 31)) };
-	regData[1] = 100;
+	//regData[1] = 100;
+	regData[2] = 100;
 	regData[3] = 100;
+	regData[4] = 90;
 	regData[5] = 100;
-	//vector<int> z = { 1,0,14 };
-	vector<int32_t> z1 = { 2, 1, 1 }; 
-	vector<int32_t> z3 = { 4, 3, 3 };
-	vector<int32_t> z5 = { 6, 5, 5 };
+	regData[6] = 100;
+	regData[7] = 200;
+	regData[8] = 200;
+	regData[9] = 100;
+	regData[10] = -100;
+	regData[11] = -100;
+	regData[12] = 100;
+	regData[13] = -100;
+
+	string tempstring1 = "Lmonmn", tempstring2 = "fdg", tempstring3 = "yj";
+	int temp1, temp2, temp3; 
+	stringstream makeint1(tempstring1);
+	makeint1 >> temp1;
+	stringstream makeint2(tempstring2);
+	makeint2 >> temp2;
+	stringstream makeint3(tempstring3);
+	makeint3 >> temp3;
+	printf("temps = %d, %d, %d", temp1, temp2, temp3); 
+	string l = "L1"; 
+	int l1 = stoi(l);
+	cout << "l1: " << l1 << endl; 
+	vector<int> z1 = { 3, 2, temp1}; 
+	vector<int> z3 = { 4, 3, temp1};
+	vector<int> z5 = { 6, 5, temp1};
+	vector<int> z2 = { 8, 7, temp1};
+	vector<int> z4 = { 9, 10,temp1 };
+	vector<int> z6 = { 12,11,temp1};
 
 
+	vector<int> z7 = { 9, 50};
+	vector<int> z8 = { 12,50};
+	pc = 100; 
+	label["L1"] = 150;
 	/*instruction.push_back(make_pair("LUI", z));
 	instruction.push_back(make_pair("AUIPC", z1));
 	instruction.push_back(make_pair("JAL", z3));
-	instruction.push_back(make_pair("JALR", z2));
-	instruction.push_back(make_pair("BEQ", z4));
-	instruction.push_back(make_pair("BNE", z5));
-	instruction.push_back(make_pair("BLT", z));
-	instruction.push_back(make_pair("BGE", z));
-	instruction.push_back(make_pair("BLTU", z6));
-	instruction.push_back(make_pair("BGEU", z1));*/
+	instruction.push_back(make_pair("JALR", z2));*/
+	//instruction.push_back(make_pair("BEQ", z1));
+	/*instruction.push_back(make_pair("BNE", z3));
+	instruction.push_back(make_pair("BLT", z5));
+	instruction.push_back(make_pair("BGE", z2));
+	instruction.push_back(make_pair("BLTU", z4));
+	instruction.push_back(make_pair("BGEU", z6));*/
 	//instruction.push_back(make_pair("LB", z1));
-	/*instruction.push_back(make_pair("LH", z2));
-	instruction.push_back(make_pair("LW", z3));
-	instruction.push_back(make_pair("LBU", z4));
-	instruction.push_back(make_pair("LHU", z5));*/
-	instruction.push_back(make_pair("SB", z1));
-	instruction.push_back(make_pair("SH", z3));
-	instruction.push_back(make_pair("SW", z5));
+	//instruction.push_back(make_pair("LH", z2));
+	//instruction.push_back(make_pair("LW", z3));
+	//instruction.push_back(make_pair("LBU", z4));
+	//instruction.push_back(make_pair("LHU", z5));
+	//instruction.push_back(make_pair("SB", z1));
+	//instruction.push_back(make_pair("SH", z3));
+	//instruction.push_back(make_pair("SW", z5));
 
+	//instruction.push_back(make_pair("LUI", z7));
+	//instruction.push_back(make_pair("AUIPC", z8));
 
 	for (int i = 0; i < instruction.size(); i++) { //check this loop ----------------------------
 
@@ -69,9 +101,9 @@ int main() {
 		rd = x0
 		*/
 		if (instruction[i].first == "LUI") {
-			regData[instruction[i].second[0]] = instruction[i].second[2] << 12; //rd = imm<<12 -- imm*2^12
+			regData[instruction[i].second[0]] = (instruction[i].second[1] << 12); //rd = imm<<12 -- imm*2^12
+			cout << endl<< "LUI: " << regData[instruction[i].second[0]] << endl;
 		}
-
 		/*
 		AUIPC (add upper immediate to pc) is used to build pc-relative addresses and uses the U-type
 		format. AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the lowest 12 bits with
@@ -82,60 +114,89 @@ int main() {
 		32-bit PC-relative data address.
 		*/
 		if (instruction[i].first == "AUIPC") {
-			regData[instruction[i].second[0]] = PC + instruction[i].second[2] << 12; //rd = PC + imm<<12
+			regData[instruction[i].second[0]] = pc + (instruction[i].second[1] << 12); //rd = PC + imm<<12
+			cout << "AUIPC" << regData[instruction[i].second[0]] << endl;
+			pc++;
 		}
+		
 
 		/*JAL: saves next address in rd
 				jump to the imm*/
 		if (instruction[i].first == "JAL") {
-			regData[instruction[i].second[0]] = PC + 1; //rd = next address
+			regData[instruction[i].second[0]] = pc + 1; //rd = next address
 			string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-			PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
+			pc = label.find(tempLabel)->second;;//new PC = label ------------------------------------
 		}
 
 		//JALR
 		if (instruction[i].first == "JALR") {
 			 
-			regData[instruction[i].second[0]] = PC + 1; //rd = x0? don't modify ---------------------- we can set it at the end instead
+			regData[instruction[i].second[0]] = pc + 1; //rd = x0? don't modify ---------------------- we can set it at the end instead
 			int offset = instruction[i].second[1];
 			int rs1 = regData[instruction[i].second[2]]; 
-			PC = rs1 + offset; //set the least significant bit to 0 ---------------------------??	
+			pc = rs1 + offset; //set the least significant bit to 0 ---------------------------??	
 		}
 
 		//BEQ 
 		if (instruction[i].first == "BEQ") {
 			if (regData[instruction[i].second[0]] == regData[instruction[i].second[1]]) {
 				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-				PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
-			} 
+				pc = label[tempLabel];//new PC = label ------------------------------------
+			}
+			else pc++;
+
+			cout << "BEQ: " << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "x" << instruction[i].second[1] << " = " << regData[instruction[i].second[1]] <<
+				 "  ,PC = " << pc << endl;
 		}
 		//BNE
 		if (instruction[i].first == "BNE") {
 			if (regData[instruction[i].second[0]] != regData[instruction[i].second[1]]) {
 				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-				PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
-			}	
+				pc = label[tempLabel];//new PC = label ------------------------------------
+			}
+			else pc++;
+
+			cout << "BNQ: " << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "x" << instruction[i].second[1] << " = " << regData[instruction[i].second[1]] << ",  "
+				<< "x" << instruction[i].second[2] << " = " << regData[instruction[i].second[2]] <<
+				"  ,PC = " << pc << endl;
 		}
 		//BLT
 		if (instruction[i].first == "BLT") {
-			if (regData[instruction[i].second[0]] < regData[instruction[i].second[1]])
-				PC = PC + instruction[i].second[2]; //label -------------------------???????????????????????????????? 	
+			if (regData[instruction[i].second[0]] < regData[instruction[i].second[1]]) {
+				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
+				pc = label[tempLabel];//new PC = label ------------------------------------
+			}
+			else pc++;
 		}
 		//BGE
 		if (instruction[i].first == "BGE") {
 			if (regData[instruction[i].second[0]] >= regData[instruction[i].second[1]]) {
-				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-				PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
-			}
+					string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
+					pc = label[tempLabel];//new PC = label ------------------------------------
+				}
+			else pc++;
+
+			cout << "BGE: " << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "x" << instruction[i].second[1] << " = " << regData[instruction[i].second[1]] << ",  "
+				<< "x" << instruction[i].second[2] << " = " << regData[instruction[i].second[2]] <<
+				"  ,PC = " << pc << endl;
 		}
 		//BLTU
 		if (instruction[i].first == "BLTU") {
-			unsigned int rs1 = regData[instruction[i].second[0]],
+			int rs1 = regData[instruction[i].second[0]],
 						rs2 = regData[instruction[i].second[1]];
 			if (rs1 < rs2) {
 				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-				PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
+				pc = label[tempLabel];//new PC = label ------------------------------------
 			}
+			else pc++;
+
+			cout << "BLTU: " << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "x" << instruction[i].second[1] << " = " << regData[instruction[i].second[1]] << ",  "
+				<< "x" << instruction[i].second[2] << " = " << regData[instruction[i].second[2]] <<
+				"  ,PC = " << pc << endl;
 		}
 		//BGEU
 		if (instruction[i].first == "BGEU") {
@@ -143,13 +204,19 @@ int main() {
 						rs2 = regData[instruction[i].second[1]];
 			if (rs1 >= rs2) {
 				string tempLabel = to_string(instruction[i].second[2]); //conveting to the string label
-				PC = label.find(tempLabel)->second;;//new PC = label ------------------------------------
+				pc = label[tempLabel];//new PC = label ------------------------------------
 			}
+			else pc++;
+
+			cout << "BGEU: " << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "x" << instruction[i].second[1] << " = " << regData[instruction[i].second[1]] << ",  "
+				<< "x" << instruction[i].second[2] << " = " << regData[instruction[i].second[2]] <<
+				"  ,PC = " << pc << endl;
 		}
 		//from memory to reg 
 		//LB -- int8_t
 		if (instruction[i].first == "LB") {//LB X1, 0(X2)
-			int32_t rs1 = regData[instruction[i].second[2]],
+			int rs1 = regData[instruction[i].second[2]],
 				offset = instruction[i].second[1];
 			int8_t temp = memory[rs1 + offset]; //int8_t to load just 8 bits 
 			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 	
