@@ -13,13 +13,52 @@ test loops
 int main() {
 
 	//suppose: 
-	vector<pair<string, vector<int>>> instruction;
-	vector<int> regData; //32 map for every reg num and it's data
-	map<int, int> memory; //maps addresses to values (32 bits)
-	map<string, int> label; //for label addressing in the inst
+	vector<pair<string, vector<int32_t>>> instruction;
+	int regData[32]; //32 map for every reg num and it's data
+	map<int32_t, int32_t> memory; //maps addresses to values (32 bits)
+	map<string, int32_t> label; //for label addressing in the inst
 
 	int PC = 0; 
 	
+	memory[101] = 2863311530;
+	memory[102] = INT_MAX;
+	memory[103] = INT_MAX;
+	memory[104] = INT_MAX;
+	memory[105] = INT_MAX;
+	memory[106] = INT_MAX;
+	memory[107] = INT_MAX;
+	memory[108] = INT_MAX;
+	memory[109] = INT_MAX;
+
+	//regData[32] = { int(pow(2, 31)) };
+	regData[1] = 100;
+	//vector<int> z = { 1,0,14 };
+	vector<int32_t> z1 = { 2,1, 1 }; 
+	vector<int32_t> z2 = { 3,2, 2 };
+	vector<int32_t> z3 = { 4, 3, 3 };
+	vector<int32_t> z4 = { 5, 4, 4 };
+	vector<int32_t> z5 = { 6, 5, 5 };
+	vector<int32_t> z6 = { 7, 6, 6 };
+	vector<int32_t> z7 = { 8, 7, 7};
+
+	/*instruction.push_back(make_pair("LUI", z));
+	instruction.push_back(make_pair("AUIPC", z1));
+	instruction.push_back(make_pair("JAL", z3));
+	instruction.push_back(make_pair("JALR", z2));
+	instruction.push_back(make_pair("BEQ", z4));
+	instruction.push_back(make_pair("BNE", z5));
+	instruction.push_back(make_pair("BLT", z));
+	instruction.push_back(make_pair("BGE", z));
+	instruction.push_back(make_pair("BLTU", z6));
+	instruction.push_back(make_pair("BGEU", z1));*/
+	instruction.push_back(make_pair("LHU", z1));
+	/*instruction.push_back(make_pair("LH", z2));
+	instruction.push_back(make_pair("LW", z3));
+	instruction.push_back(make_pair("LBU", z4));
+	instruction.push_back(make_pair("LHU", z5));*/
+	/*instruction.push_back(make_pair("SB", z7));
+	instruction.push_back(make_pair("SH", z7));
+	instruction.push_back(make_pair("SW", z7));*/
 
 
 	for (int i = 0; i < instruction.size(); i++) { //check this loop ----------------------------
@@ -111,23 +150,32 @@ int main() {
 		//from memory to reg 
 		//LB -- int8_t
 		if (instruction[i].first == "LB") {//LB X1, 0(X2)
-			int rs1 = regData[instruction[i].second[2]], 
+			int32_t rs1 = regData[instruction[i].second[2]],
 				offset = instruction[i].second[1];
 			int8_t temp = memory[rs1 + offset]; //int8_t to load just 8 bits 
 			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 	
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//LH -- int - 16 bits
 		if (instruction[i].first == "LH") { 
 			int rs1 = regData[instruction[i].second[2]],
 				offset = instruction[i].second[1];
 			int16_t temp = memory[rs1 + offset]; //short to load just 16 bits 
-			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 	
+			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//LW 32 bits
 		if (instruction[i].first == "LW") {
 			int rs1 = regData[instruction[i].second[2]], 
 				offset = instruction[i].second[1];
 			regData[instruction[i].second[0]] = memory[rs1 + offset]; //rd = memory[rs1 + offset] 	
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//LBU - uint8_t
 		if (instruction[i].first == "LBU") {
@@ -135,6 +183,9 @@ int main() {
 				offset = instruction[i].second[1];
 			uint8_t temp = memory[rs1 + offset]; //uint8_t to load just 8 unsigned bits 
 			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 	 
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 		//LHU
 		if (instruction[i].first == "LHU") {
@@ -142,6 +193,9 @@ int main() {
 				offset = instruction[i].second[1];
 			uint16_t temp = memory[rs1 + offset]; //unsigned short int to load just 16 bits 
 			regData[instruction[i].second[0]] = temp; //rd = memory[rs1 + offset] 	 
+
+			cout << "x" << instruction[i].second[0] << " = " << regData[instruction[i].second[0]] << ",  "
+				<< "memory = " << memory[rs1 + offset] << endl;
 		}
 
 		//from reg to memory
@@ -167,6 +221,10 @@ int main() {
 		}
 	}
 
+
+	/*for (int i = 1; i <= 10; i++) {
+		cout << "x" << i <<  " = " << regData[19] << ",  " << memory
+	}*/
 	system("pause");
 	return 0;
 }
